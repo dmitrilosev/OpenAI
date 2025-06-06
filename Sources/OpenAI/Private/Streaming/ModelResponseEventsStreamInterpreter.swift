@@ -106,6 +106,14 @@ final class ModelResponseEventsStreamInterpreter: @unchecked Sendable, StreamInt
                 .functionCallArguments(.delta(try decoder.decode(Schemas.ResponseFunctionCallArgumentsDeltaEvent.self, from: data)))
         case .responseFunctionCallArgumentsDone:
                 .functionCallArguments(.done(try decoder.decode(Schemas.ResponseFunctionCallArgumentsDoneEvent.self, from: data)))
+        case .responseReasoningSummaryPartAdded:
+                .reasoningSummaryPart(.added(try decode(data: data)))
+        case .responseReasoningSummaryPartDone:
+                .reasoningSummaryPart(.done(try decode(data: data)))
+        case .responseReasoningSummaryTextDelta:
+                .reasoningSummaryText(.delta(try decode(data: data)))
+        case .responseReasoningSummaryTextDone:
+                .reasoningSummaryText(.done(try decode(data: data)))
         case .responseFileSearchCallInProgress:
                 .fileSearchCall(.inProgress(try decode(data: data)))
         case .responseFileSearchCallSearching:

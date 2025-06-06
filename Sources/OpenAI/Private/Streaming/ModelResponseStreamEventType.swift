@@ -30,6 +30,12 @@ enum ModelResponseStreamEventType: String {
     case responseFunctionCallArgumentsDelta = "response.function_call_arguments.delta"
     case responseFunctionCallArgumentsDone = "response.function_call_arguments.done"
     
+    case responseReasoningSummaryPartAdded = "response.reasoning_summary_part.added"
+    case responseReasoningSummaryPartDone = "response.reasoning_summary_part.done"
+
+    case responseReasoningSummaryTextDelta = "response.reasoning_summary_text.delta"
+    case responseReasoningSummaryTextDone = "response.reasoning_summary_text.done"
+    
     case responseFileSearchCallInProgress = "response.file_search_call.in_progress"
     case responseFileSearchCallSearching = "response.file_search_call.searching"
     case responseFileSearchCallCompleted = "response.file_search_call.completed"

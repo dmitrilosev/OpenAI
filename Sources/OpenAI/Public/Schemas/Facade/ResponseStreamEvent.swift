@@ -49,6 +49,20 @@ public enum ResponseStreamEvent: Codable, Equatable, Sendable {
         }
     }
     
+    public enum ReasoningSummaryPartEvent: Codable, Equatable, Sendable {
+        /// Emitted when a new reasoning summary part is added.
+        case added(Schemas.ResponseReasoningSummaryPartAddedEvent)
+        /// Emitted when a reasoning summary part is completed.
+        case done(Schemas.ResponseReasoningSummaryPartDoneEvent)
+    }
+
+    public enum ReasoningSummaryTextEvent: Codable, Equatable, Sendable {
+        /// Emitted when there is a partial reasoning summary text delta.
+        case delta(Schemas.ResponseReasoningSummaryTextDeltaEvent)
+        /// Emitted when reasoning summary text is finalized.
+        case done(Schemas.ResponseReasoningSummaryTextDoneEvent)
+    }
+    
     public enum RefusalEvent: Codable, Equatable, Sendable {
         /// Emitted when there is a partial refusal text.
         case delta(Schemas.ResponseRefusalDeltaEvent)
@@ -117,6 +131,8 @@ public enum ResponseStreamEvent: Codable, Equatable, Sendable {
     case outputItem(OutputItemEvent)
     case contentPart(ContentPartEvent)
     case outputText(OutputTextEvent)
+    case reasoningSummaryPart(ReasoningSummaryPartEvent)
+    case reasoningSummaryText(ReasoningSummaryTextEvent)
     case audio(AudioEvent)
     case audioTranscript(AudioTranscriptEvent)
     case codeInterpreterCall(CodeInterpreterCallEvent)
@@ -226,6 +242,14 @@ public enum ResponseStreamEvent: Codable, Equatable, Sendable {
             self = .functionCallArguments(.delta(value))
         } else if let value = rawEvent.value19 {
             self = .functionCallArguments(.done(value))
+        } else if let value = rawEvent.value25 {
+            self = .reasoningSummaryPart(.added(value))
+        } else if let value = rawEvent.value26 {
+            self = .reasoningSummaryPart(.done(value))
+        } else if let value = rawEvent.value27 {
+            self = .reasoningSummaryText(.delta(value))
+        } else if let value = rawEvent.value28 {
+            self = .reasoningSummaryText(.done(value))
         } else if let value = rawEvent.value29 {
             self = .refusal(.delta(value))
         } else if let value = rawEvent.value30 {
