@@ -85,6 +85,7 @@ final class StreamingSession<Interpreter: StreamInterpreter>: NSObject, Identifi
             let data = self.middlewares.reduce(data) { current, middleware in
                 middleware.interceptStreamingData(request: dataTask.originalRequest, current)
             }
+            guard !data.isEmpty else { return }
             self.interpreter.processData(data)
         }
     }
