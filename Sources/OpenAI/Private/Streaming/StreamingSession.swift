@@ -99,7 +99,7 @@ final class StreamingSession<Interpreter: StreamInterpreter>: NSObject, Identifi
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode >= 400 {
                 self.receivedHTTPResponse = httpResponse
                 self.didReceiveErrorResponse = true
-                completionHandler(.cancel)
+                completionHandler(.allow)
                 return
             }
             completionHandler(.allow)

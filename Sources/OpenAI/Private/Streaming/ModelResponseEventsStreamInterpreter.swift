@@ -55,21 +55,6 @@ final class ModelResponseEventsStreamInterpreter: @unchecked Sendable, StreamInt
     }
     
     private func processEvent(_ event: ServerSentEventsStreamParser.Event) throws {
-        guard let eventType = ModelResponseStreamEventType(rawValue: event.eventType)
-        else { throw InterpreterError.unknownEventType(event.eventType) }
-        
-        if event.data.isEmpty {
-            switch eventType {
-            case .responseOutputTextDelta,
-                 .responseOutputTextAnnotationAdded,
-                 .responseOutputTextDone:
-                // просто выходим не декодируя
-                return
-            default:
-                break
-            }
-        }
-        
         guard let modelResponseEventType = ModelResponseStreamEventType(rawValue: event.eventType) else {
             throw InterpreterError.unknownEventType(event.eventType)
         }
@@ -88,7 +73,16 @@ final class ModelResponseEventsStreamInterpreter: @unchecked Sendable, StreamInt
         modelResponseEventType: ModelResponseStreamEventType,
         data: Data
     ) throws -> ResponseStreamEvent {
-        switch modelResponseEventType {
+        guard !data.isEmpty else {
+            return .outputText(.done(Schemas.ResponseTextDoneEvent(
+                _type: .response_outputText_done,
+                itemId: "",
+                outputIndex: 0,
+                contentIndex: 0,
+                text: ""
+            )))
+        }
+        return switch modelResponseEventType {
         case .responseCreated:
                 .created(try decoder.decode(ResponseEvent.self, from: data))
         case .responseInProgress:
